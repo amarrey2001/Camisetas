@@ -1,0 +1,27 @@
+extends ../layouts/main
+
+block contenido
+
+        h2 Listado de camisetas
+        if mensaje!=null
+            p= mensaje
+        table.table
+            thead 
+                tr 
+                    th talla 
+                    th sexo 
+                    th color 
+                    th marca 
+                    th precio
+                    th acción
+            tbody 
+                each camiseta in camisetas
+                    tr 
+                        td=camiseta.talla 
+                        td=camiseta.sexo 
+                        td
+                            span(style=`color:${camiseta.color}`)=camiseta.color 
+                        td=camiseta.marca 
+                        td=camiseta.precio 
+                        td
+                            a.btn.btn-success(href=`/carro/add/camiseta/${camiseta.id}`) Añadir a la cesta
