@@ -1,95 +1,58 @@
-const db = require('../db');
+const db = require('../db')
 
-// Muestra el carrito de compras (GET /carro)
-exports.mostrarCarrito = (req, res) => {
-    if (!req.session.user) {
-        return res.redirect('/auth/login');
+exports.addCamisetaForm = (req, res) => {
+    const { id } = req.params;
+
+    if (isNaN(id)){
+        res.render(
+            'error',
+            {mensaje:'Añadiendo al carro: falta un parámetro'})
     }
 
-    const idUsuario = req.session.user.id;
+    let query = 'SELECT * FROM camiseta where id=?'
 
-    // Unimos carrito con camiseta para saber qué estamos comprando
-    const sql = `
-        SELECT 
-            c.id, 
-            c.cantidad, 
-            c.precio_unitario, 
-            c.subtotal,
-            p.marca, 
-            p.talla, 
-            p.color, 
-            p.sexo
-        FROM carrito c
-        JOIN camiseta p ON c.camiseta = p.id
-        WHERE c.usuario = ?
-    `;
-
-    db.query(sql, [idUsuario], (err, resultados) => {
-        if (err) {
-            console.error(err);
-            return res.render('error', { mensaje: 'Error al obtener el carrito' });
+    db.query(query, id, (error, resultado)=>{
+        if (error) {
+            res.render('error', {
+                mensaje: 'Imposible acceder a la camiseta'})
+        } else {
+            datos = resultado[0]
+            res.render('carro/add')
         }
+    })
 
-        const total = resultados.reduce((suma, item) => suma + item.subtotal, 0);
+}
 
-        // 👇 AQUÍ ESTABA TU ERROR VISUAL: debe apuntar a la vista de lista, no a 'add'
-        res.render('carro/list', {
-            items: resultados,
-            total: total,
-            user: req.session.user
-        });
-    });
-};
-
-// Añade un producto al carrito (POST /carrito/add)
 exports.addCamiseta = (req, res) => {
-    if (!req.session.user) {
-        return res.redirect('/auth/login');
-    }
+    const {pedido, producto, cantidad} = req.body
+    const { id } = req.params;
+    // Crear si no existe el pedido
+    const sqlPedido = "INSERT INTO `pedido` \
+        (`fecha`, `estado`, `cliente`, `total`) \
+        VALUES (now(), 'carrito', ?, '0.00')"
+    // TODO: sólo podemos añadir camisetas a pedidos que
+    // estén en modo "carrito", si no estaríamos modificando
+    // un pedido pagado y sin cobrar por el producto.
+    const sqlLineaPedido = "INSERT INTO `linea_pedido` " +
+        "(pedido, producto, precio_venta, cantidad) "+
+        "VALUES(?,?,NULL,?)"
+    res.redirect('/carro')
+}
 
-    // Datos que vienen del formulario (Pug)
-    const { camiseta_id, cantidad } = req.body;
-    const usuario_id = req.session.user.id;
+/*
+// añadir al carro
+router.get('/add/camiseta/:id', carroController.addCamisetaForm)
+router.post('/add/camiseta/:id', carroController.addCamiseta)
 
-    // 1. Primero necesitamos saber el precio de la camiseta para calcular el subtotal
-    const queryPrecio = 'SELECT precio FROM camiseta WHERE id = ?';
+// quitar del carro
+router.get('/del/camiseta/:id', carroController.delCamisetaForm)
+router.post('/del/camiseta/:id', carroController.delCamiseta)
 
-    db.query(queryPrecio, [camiseta_id], (err, result) => {
-        if (err || result.length === 0) {
-            return res.render('error', { mensaje: 'Producto no encontrado' });
-        }
+// pagar
+router.get('/procesar', carroController.procesarCarroForm)
+router.post('/procesar', carroController.procesarCarro)
 
-        const precio = result[0].precio;
-        const subtotal = precio * cantidad;
+// ver el contenido de la cesta de la compra
+router.get('', carroController.muestraCarro)
 
-        // 2. Insertamos en la tabla CARRITO
-        const sqlInsert = `
-            INSERT INTO carrito (usuario, camiseta, cantidad, precio_unitario, subtotal) 
-            VALUES (?, ?, ?, ?, ?)
-        `;
-
-        db.query(sqlInsert, [usuario_id, camiseta_id, cantidad, precio, subtotal], (err, result) => {
-            if (err) {
-                console.error(err);
-                return res.render('error', { mensaje: 'Error al añadir al carrito' });
-            }
-
-            res.redirect('/carro');
-        });
-    });
-};
-
-// Borrar un producto del carrito (POST /carrito/delete/:id)
-exports.deleteCamiseta = (req, res) => {
-    const { id } = req.params; // ID de la línea del carrito
-
-    const sql = 'DELETE FROM carrito WHERE id = ?';
-
-    db.query(sql, [id], (err, result) => {
-        if (err) {
-            console.error(err);
-            return res.render('error', { mensaje: 'Error al eliminar producto' });
-        }
-        res.redirect('/carro');
-    });
-};
+*/
