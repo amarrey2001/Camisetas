@@ -1,0 +1,39 @@
+extends ../layouts/main
+
+block contenido
+
+    h2 Listado de pedidos
+    if mensaje!=null
+        p= mensaje
+
+    table.table
+        thead
+            tr
+                th id
+                th camiseta
+                th cantidad
+                th cliente
+                th método de pago
+                th fecha
+                th estado
+                th pagado
+                th editar
+                th borrar
+        tbody
+            each pedido in pedidos
+                tr
+                    td= pedido.id
+                    td #{pedido.camiseta.marca} - #{pedido.camiseta.talla} (#{pedido.camiseta.color})
+                    td= pedido.cantidad
+                    td= pedido.cliente
+                    td= pedido.metodoPago
+                    td= pedido.fecha
+                    td= pedido.estado
+                    td= pedido.pagado==1
+                    td
+                        a.btn.btn-success(href=`/admin/pedido/edit/${pedido.id}`) editar
+                    td
+                        a.btn.btn-danger(href=`/admin/pedido/del/${pedido.id}`) borrar
+
+    p
+        a(href="/admin/pedido/add") Añadir un nuevo pedido
