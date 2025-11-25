@@ -39,6 +39,28 @@ exports.addCamiseta = (req, res) => {
     res.redirect('/carro')
 }
 
+exports.delCamiseta = (req, res) => {
+    const { id } = req.params;
+
+    // Comprobamos que el id sea válido
+    if (isNaN(id)) {
+        res.render('error', { mensaje: 'Eliminar del carro: falta un parámetro' });
+        return;
+    }
+
+    // Borrar la línea de pedido correspondiente del carrito
+    const sql = "DELETE FROM linea_pedido WHERE id=" + id;
+
+    db.query(sql, function(error) {
+        if (error) {
+            res.render('error', { mensaje: 'No se pudo eliminar la camiseta del carrito' });
+        } else {
+            // Redirigimos al carro después de borrar
+            res.redirect('/carro');
+        }
+    });
+};
+
 /*
 // añadir al carro
 router.get('/add/camiseta/:id', carroController.addCamisetaForm)
