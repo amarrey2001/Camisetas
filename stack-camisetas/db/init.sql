@@ -40,12 +40,12 @@ CREATE TABLE `pedido` (
 
 
 CREATE TABLE `linea_pedido` (
-`ID_linea_pedido` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-`ID_Pedido` INT NOT NULL,
-`ID_Camiseta` INT NOT NULL,
+`ID_linea_pedido` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+`ID_Pedido` INT UNSIGNED NOT NULL,
+`ID_Camiseta` INT UNSIGNED NOT NULL,
 `Precio_Venta` DECIMAL(10, 2) NOT NULL,
-FOREIGN KEY (`ID_Pedido`) REFERENCES `Pedido` (`id`),
-FOREIGN KEY (`ID_Camiseta`) REFERENCES `Camiseta` (`id`)
+FOREIGN KEY (`ID_Pedido`) REFERENCES `pedido` (`id`),
+FOREIGN KEY (`ID_Camiseta`) REFERENCES `camiseta` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `carrito`(

@@ -2,5 +2,40 @@ extends ./layouts/main
 
 block contenido
 
-        h2 Tienda de camisetas online
-        p Bienvenido a nuestra tienda online
+    h2 Tienda de camisetas online
+    p Bienvenido a nuestra tienda online
+
+    div(style="display: flex; flex-wrap: wrap; gap: 20px; margin-top: 20px;")
+
+        each camiseta in camisetas
+            div(style="border: 1px solid #ddd; padding: 15px; border-radius: 8px; width: 220px; text-align: center; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1);")
+
+                h3(style="margin-top: 0;")= camiseta.marca
+
+                p
+                    strong Talla:
+                    | #{camiseta.talla.toUpperCase()}
+                    br
+                    span(style="color: #666; font-size: 0.9em") (#{camiseta.sexo})
+
+                div(style="margin: 10px 0; display: flex; justify-content: center; align-items: center; gap: 5px;")
+                    span Color:
+                    span(style=`display: inline-block; width: 20px; height: 20px; border-radius: 50%; border: 1px solid #333; background-color: ${camiseta.color}`)
+
+                h4(style="color: #333; font-size: 1.2em;") #{camiseta.precio} €
+
+                if user
+                    form(action="/carro/add", method="POST")
+                        input(type="hidden", name="camiseta_id", value=camiseta.id)
+
+                        div(style="margin-bottom: 10px;")
+                            label(for=`cant-${camiseta.id}`, style="font-size: 0.9em;") Cantidad:
+                            input(id=`cant-${camiseta.id}`, type="number", name="cantidad", value="1", min="1", max=camiseta.stock, style="width: 50px; text-align: center;")
+
+                        button(type="submit", style="background-color: #28a745; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; width: 100%;") Añadir a la cesta
+
+                else
+                    a(href="/auth/login", style="display: block; background-color: #007bff; color: white; text-decoration: none; padding: 8px 15px; border-radius: 4px; width: 100%; box-sizing: border-box;") Añadir a la cesta
+
+        if camisetas.length === 0
+            p(style="width: 100%; text-align: center; color: #666;") No hay camisetas disponibles en este momento.

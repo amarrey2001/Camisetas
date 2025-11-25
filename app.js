@@ -10,6 +10,7 @@ const authRouter = require('./routes/authRouter')
 const carroRouter = require('./routes/carroRouter')
 const productoRouter = require('./routes/productoRouter')
 const pedidoRouter = require('./routes/pedidoRouter')
+const publicoController = require('./controllers/camisetaController')
 
 // crea el objeto servidor Web
 // todavía no sirve páginas (hay que darle
@@ -57,10 +58,7 @@ app.use('/carro', carroRouter)
 app.use('/camiseta', productoRouter)
 app.use('/pedido',pedidoRouter)
 
-// TO_DO meterlo en un controlador de rutas generales
-app.get('/', (req, res) =>{
-  res.render('index')
-})
+app.get('/', publicoController.catalogo)
 
 // le doy la orden de escuchar en el puerto 
 // indicado y servir páginas Web

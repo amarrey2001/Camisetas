@@ -20,7 +20,7 @@ exports.addCamisetaForm = (req, res) => {
             res.render('carro/add')
         }
     })
-    
+
 }
 
 exports.addCamiseta = (req, res) => {
@@ -31,9 +31,9 @@ exports.addCamiseta = (req, res) => {
         (`fecha`, `estado`, `cliente`, `total`) \
         VALUES (now(), 'carrito', ?, '0.00')"
     // TODO: sólo podemos añadir camisetas a pedidos que
-    // estén en modo "carrito", si no estaríamos modificando 
+    // estén en modo "carrito", si no estaríamos modificando
     // un pedido pagado y sin cobrar por el producto.
-    const sqlLineaPedido = "INSERT INTO `linea_pedido` " + 
+    const sqlLineaPedido = "INSERT INTO `linea_pedido` " +
         "(pedido, producto, precio_venta, cantidad) "+
         "VALUES(?,?,NULL,?)"
     res.redirect('/carro')

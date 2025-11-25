@@ -1,21 +1,11 @@
-const { urlencoded } = require('body-parser')
-const db = require('../db')
-const router = require('../routes/camisetaRouter')
-const carroController = require('../controllers/carroController')
+const express = require('express');
+const router = express.Router();
+const carroController = require('../controllers/carroController');
 
-// añadir al carro
-router.get('/add/camiseta/:id', carroController.addCamisetaForm)
-router.post('/add/camiseta/:id', carroController.addCamiseta)
-/*
-// quitar del carro
-router.get('/del/camiseta/:id', carroController.delCamisetaForm)
-router.post('/del/camiseta/:id', carroController.delCamiseta)
+router.get('/', carroController.mostrarCarrito);
 
-// pagar
-router.get('/procesar', carroController.procesarCarroForm)
-router.post('/procesar', carroController.procesarCarro)
-*/
-// ver el contenido de la cesta de la compra
-// router.get('/', carroController.muestraCarro)
+router.post('/add', carroController.addCamiseta);
 
-module.exports=router;
+router.post('/delete/:id', carroController.deleteCamiseta);
+
+module.exports = router;

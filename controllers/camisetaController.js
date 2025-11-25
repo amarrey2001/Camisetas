@@ -154,3 +154,21 @@ exports.camisetaDelete = (req, res) => {
 
 }
 
+exports.catalogo = (req, res) => {
+    // Solo mostramos las camisetas activas y con stock
+    const sql = 'SELECT * FROM camiseta WHERE activo = 1 AND stock > 0';
+
+    db.query(sql, (err, resultados) => {
+        if (err) {
+            console.error(err);
+            res.render('error', { mensaje: 'Error al cargar el catálogo' });
+        } else {
+            res.render('index', {
+                camisetas: resultados,
+                // Pasamos el usuario a la vista para comprobar si está logueado
+                user: req.session.user
+            });
+        }
+    });
+};
+
