@@ -60,6 +60,32 @@ exports.delCamiseta = (req, res) => {
         }
     });
 };
+exports.mostrarCarrito = (req, res) => {
+    if(!req.session.user){
+        return res.redirect('/auth/login');
+    }
+
+    const idUsuario = req.session.user.id;
+
+    // Unimos carrito con camiseta para saber qué estamos comprando
+    const sql = `SELECT c.id, c.cantidad, c.precio_unitario, c.subtotal, p.marca, p.talla, p.color FROM carrito c JOIN camiseta p ON c.camiseta = p.id WHERE c.usuario = ?`;
+
+    db.query(sql, [idUsuario], (err, resultados) => {
+        if(err){
+            console.error(err);
+
+            return res.render('error', {
+                mensaje: 'Error al obtener el carrito'
+            });
+        }
+
+        const total = resultados.reduce((suma, item) => suma + item.subtotal, 0);
+
+        res.render('carro/list', {
+            items:resultados, total: total, user: req.session.user
+        });
+    });
+};
 
 /*
 // añadir al carro
