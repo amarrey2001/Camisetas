@@ -15,12 +15,13 @@ exports.login = (req, res) => {
             res.render('error', {mensaje: 'Imposible localizar el usuario en base de datos'})
             console.log(error)
         } else {
-            // console.log(result)
-            if (result[0]) {                
-                // usuario habilitado y el pass coincide
+            if (result[0]) {
                 if(result[0].activo==1 && bcrypt.compareSync(password, result[0].password)){                    
-                    req.session.user = result[0].username
-                    req.session.tipo = result[0].tipo
+                    req.session.user = {
+                        username: result[0].username,
+                        tipo: result[0].tipo,
+                        id: result[0].id       // <--- Aquí guardamos el ID de forma segura
+                    };
                     res.redirect('/')
                 } else {
                     res.render('error', {mensaje: 'Credenciales incorrectas.'})

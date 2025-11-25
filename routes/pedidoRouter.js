@@ -7,4 +7,6 @@ router.get('/', pedidoController.pedidos)
 router.get('/edit/:id', pedidoController.pedidoUpdateForm)
 router.post('/edit/:id', pedidoController.pedidoUpdate)
 
-router.get('/:id',pedido)
+router.get('/:id',pedidoController.pedido)
+
+module.exports = router

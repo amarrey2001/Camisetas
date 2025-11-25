@@ -1,0 +1,62 @@
+extends ../layouts/main
+
+block contenido
+    h2.mt-4 Mi Cesta de la Compra
+
+    //- IMPORTANTE: El 'if' y el 'else' deben estar alineados verticalmente
+    if items && items.length > 0
+        div.table-responsive.mt-4
+            table.table.table-hover.align-middle
+                thead.table-light
+                    tr
+                        th Producto
+                        th.text-center Precio
+                        th.text-center Cantidad
+                        th.text-end Subtotal
+                        th.text-center Acciones
+                tbody
+                    each item in items
+                        tr
+                            //- Columna Producto
+                            td
+                                div.d-flex.align-items-center
+                                    //- Círculo de color
+                                    div(style=`width: 30px; height: 30px; border-radius: 50%; background-color: ${item.color}; border: 1px solid #ccc; margin-right: 15px;`)
+
+                                    div
+                                        h5.mb-0= item.marca
+                                        small.text-muted Talla: #{item.talla.toUpperCase()} | #{item.sexo}
+
+                            //- Columna Precio
+                            td.text-center #{item.precio_unitario} €
+
+                            //- Columna Cantidad
+                            td.text-center
+                                strong #{item.cantidad}
+
+                            //- Columna Subtotal
+                            td.text-end.fw-bold #{item.subtotal} €
+
+                            //- Columna Acciones (Botón Eliminar)
+                            td.text-center
+                                form(action=`/carrito/delete/${item.id}`, method="POST")
+                                    button.btn.btn-outline-danger.btn-sm(type="submit") Eliminar
+
+        //- Sección de Totales y Botones
+        div.row.mt-4.mb-5
+            div.col-md-6
+                a.btn.btn-secondary(href="/") Seguir comprando
+
+            div.col-md-6.text-end
+                div.card.bg-light
+                    div.card-body
+                        h4 Total a Pagar:
+                            span.text-success #{total} €
+
+                        a.btn.btn-success.btn-lg.w-100.mt-3(href="/pedido/crear") Tramitar Pedido
+
+    else
+        div.alert.alert-info.mt-4.text-center
+            h4 Tu cesta está vacía
+            p.mb-4 No has añadido ninguna camiseta todavía.
+            a.btn.btn-primary(href="/") Ir al Catálogo
