@@ -9,6 +9,7 @@ const camisetaRouter = require('./routes/camisetaRouter')
 const authRouter = require('./routes/authRouter')
 const carroRouter = require('./routes/carroRouter')
 const productoRouter = require('./routes/productoRouter')
+const pedidoRouter = require('./routes/pedidoRouter')
 
 // crea el objeto servidor Web
 // todavía no sirve páginas (hay que darle
@@ -54,6 +55,7 @@ app.use('/admin/camiseta', camisetaRouter)
 app.use('/auth', authRouter)
 app.use('/carro', carroRouter)
 app.use('/camiseta', productoRouter)
+app.use('/pedido',pedidoRouter)
 
 // TO_DO meterlo en un controlador de rutas generales
 app.get('/', (req, res) =>{
@@ -63,5 +65,5 @@ app.get('/', (req, res) =>{
 // le doy la orden de escuchar en el puerto 
 // indicado y servir páginas Web
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(`http://localhost:${port}`)
 })
