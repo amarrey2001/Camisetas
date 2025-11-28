@@ -13,7 +13,7 @@ router.post('/edit/:id', camisetaController.camisetaUpdate)
 router.get('/del/:id', camisetaController.camisetaDeleteForm)
 router.post('/del/:id', camisetaController.camisetaDelete)
 
-// ESTA RUTA ES EMBIGUA CON LA DE ANTES, POR ESO VA DESPUÉS
+// ESTA RUTA ES AMBIGUA CON LA DE ANTES, POR ESO VA DESPUÉS
 router.get('/:id', camisetaController.camiseta)
 
 

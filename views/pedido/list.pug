@@ -17,6 +17,7 @@ block contenido
                 th fecha
                 th estado
                 th pagado
+                th ver
                 th editar
                 th borrar
         tbody
@@ -30,6 +31,8 @@ block contenido
                     td= pedido.fecha
                     td= pedido.estado
                     td= pedido.pagado==1
+                    td
+                        a.btn.btn-primary(href=`/admin/pedido/${pedido.id}`) ver
                     td
                         a.btn.btn-success(href=`/admin/pedido/edit/${pedido.id}`) editar
                     td
