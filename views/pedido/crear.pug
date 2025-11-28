@@ -9,7 +9,7 @@ block contenido
         label.form-label(for="camisetaId") Camiseta:
         select(name="camisetaId", id="camisetaId", required)
             each camiseta in camisetas
-                option(value=camiseta._id) #{camiseta.marca} - #{camiseta.talla} (#{camiseta.color})
+                option(value=camiseta.id) #{camiseta.marca} - #{camiseta.talla} (#{camiseta.color})
         br
 
         label.form-label(for="cantidad") Cantidad:

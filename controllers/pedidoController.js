@@ -15,7 +15,25 @@ exports.pedidos = (req, res) => {
 }
 
 exports.pedidoCreateForm = (req, res) => {
-    res.render('pedido/crear')
+    // 1. Preparamos la consulta para obtener las camisetas
+    const query = 'SELECT * FROM camiseta';
+
+    // 2. Ejecutamos la consulta
+    db.query(query, (error, resultados) => {
+        if (error) {
+            console.log(error);
+            return res.render('error', { mensaje: 'Error al cargar camisetas' });
+        }
+
+        // 3. Imprimimos en consola para verificar que hay datos (mira tu terminal tras guardar)
+        console.log("Camisetas encontradas:", resultados);
+
+        // 4. Renderizamos la vista enviando la variable 'camisetas'
+        // IMPORTANTE: El nombre 'camisetas' aquí debe coincidir con el del 'each' en Pug
+        res.render('pedido/crear', {
+            camisetas: resultados
+        });
+    });
 }
 
 exports.pedidoCreate = (req, res) => {
