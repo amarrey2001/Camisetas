@@ -1,4 +1,3 @@
-
 CREATE DATABASE `camisetas`;
 
 USE `camisetas`;
