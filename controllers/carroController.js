@@ -6,23 +6,35 @@ exports.mostrarCarrito = (req, res) => {
     }
 
     const idUsuario = req.session.user.id;
-
-    // Unimos carrito con camiseta para saber qué estamos comprando
     const sql = `SELECT c.id, c.cantidad, c.precio_unitario, c.subtotal, p.marca, p.talla, p.color FROM carrito c JOIN camiseta p ON c.camiseta = p.id WHERE c.usuario = ?`;
 
     db.query(sql, [idUsuario], (err, resultados) => {
+
         if(err){
             console.error(err);
-
-            return res.render('error', {
-                mensaje: 'Error al obtener el carrito'
-            });
+            return res.render('error', { mensaje: 'Error al obtener el carrito' });
         }
 
-        const total = resultados.reduce((suma, item) => suma + item.subtotal, 0);
+        // Si la base de datos no devuelve nada, inicializamos como array vacío
+        if (!resultados) {
+            resultados = [];
+        }
+
+        // Ahora sí podemos usar la variable 'resultados' porque coincide con el nombre de arriba
+        const items = resultados.map(item => {
+            return {
+                ...item,
+                precio_unitario: parseFloat(item.precio_unitario),
+                subtotal: parseFloat(item.subtotal)
+            };
+        });
+
+        const total = items.reduce((suma, item) => suma + item.subtotal, 0);
 
         res.render('carro/list', {
-            items:resultados, total: total, user: req.session.user
+            items: items,
+            total: total,
+            user: req.session.user
         });
     });
 };

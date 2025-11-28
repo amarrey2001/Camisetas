@@ -2,41 +2,36 @@ nav.navbar.navbar-expand-lg.navbar-dark.bg-dark.mb-4
     .container
         a.navbar-brand(href="/") Tienda Camisetas
 
-        //- Botón hamburguesa para móvil
         button.navbar-toggler(type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav")
             span.navbar-toggler-icon
 
         #navbarNav.collapse.navbar-collapse
+            //- MENU IZQUIERDA (me-auto)
             ul.navbar-nav.me-auto
-                //- Enlace al Catálogo (para todos)
+                //- Enlaces para todos (públicos)
                 li.nav-item
                     a.nav-link(href="/") Catálogo
-
-                //- Enlace al Carrito (para todos)
                 li.nav-item
                     a.nav-link(href="/carro") Mi Cesta
 
-            //- ----------------------------------------------------
-            //- LÓGICA DE USUARIO (Lado derecho del menú)
-            //- ----------------------------------------------------
-            ul.navbar-nav.ms-auto
-
+                //- Opciones específicas según rol
                 if user
-                    //- OPCIÓN A: El usuario ESTÁ logueado
-
-                    //- Si es ADMIN/OPERADOR, le mostramos el panel de control
                     if user.tipo == 'OPERADOR'
                         li.nav-item
-                            a.nav-link.text-warning(href="/admin/camiseta") Panel Admin
+                            a.nav-link.text-warning(href="/admin/camiseta") Admin Camisetas
+                        li.nav-item
+                            a.nav-link.text-warning(href="/admin/pedido") Admin Pedidos
 
-                    //- Saludo y Botón de Salir
+            //- MENU DERECHA (ms-auto)
+            ul.navbar-nav.ms-auto
+                if user
+                    //- OPCIÓN A: Usuario Logueado
                     li.nav-item.d-flex.align-items-center
                         span.text-light.me-3 Hola, #{user.username}
                     li.nav-item
                         a.btn.btn-outline-danger.btn-sm(href="/auth/logout") Cerrar Sesión
-
                 else
-                    //- OPCIÓN B: El usuario NO está logueado (Invitado)
+                    //- OPCIÓN B: Invitado (No logueado)
                     li.nav-item
                         a.nav-link(href="/auth/login") Iniciar Sesión
                     li.nav-item
