@@ -3,7 +3,6 @@ extends ../layouts/main
 block contenido
     h2.mt-4 Mi Cesta de la Compra
 
-    //- IMPORTANTE: El 'if' y el 'else' deben estar alineados verticalmente
     if items && items.length > 0
         div.table-responsive.mt-4
             table.table.table-hover.align-middle
@@ -28,21 +27,22 @@ block contenido
                                         small.text-muted Talla: #{item.talla.toUpperCase()} | #{item.sexo}
 
                             //- Columna Precio
-                            td.text-center #{item.precio_unitario} €
+                            td.text-center #{Number(item.precio_unitario).toFixed(2)} €
 
                             //- Columna Cantidad
                             td.text-center
                                 strong #{item.cantidad}
 
                             //- Columna Subtotal
-                            td.text-end.fw-bold #{item.subtotal} €
+                            td.text-end.fw-bold #{Number(item.subtotal).toFixed(2)} €
 
                             //- Columna Acciones (Botón Eliminar)
                             td.text-center
-                                form(action=`/carrito/delete/${item.id}`, method="POST")
+                                form(action=`/carro/delete/${item.id}`, method="POST")
                                     button.btn.btn-outline-danger.btn-sm(type="submit") Eliminar
 
-        //- Sección de Totales y Botones
+        //- Sección de Totales y Botones (AQUÍ ESTABA EL ERROR DE INDENTACIÓN)
+        //- Fíjate que este div está alineado con el div.table-responsive de arriba, NO dentro del bucle
         div.row.mt-4.mb-5
             div.col-md-6
                 a.btn.btn-secondary(href="/") Seguir comprando
@@ -50,10 +50,11 @@ block contenido
             div.col-md-6.text-end
                 div.card.bg-light
                     div.card-body
+                        //- Total General
                         h4 Total a Pagar:
-                            span.text-success #{total} €
+                            span.text-success.ms-2 #{Number(total).toFixed(2)} €
 
-                        a.btn.btn-success.btn-lg.w-100.mt-3(href="/pedido/crear") Tramitar Pedido
+                        a.btn.btn-success.btn-lg.w-100.mt-3(href="/pedido/add") Tramitar Pedido
 
     else
         div.alert.alert-info.mt-4.text-center
