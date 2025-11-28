@@ -1,25 +1,62 @@
 extends ../layouts/main
 
 block contenido
+    .form-container
+        h2 Registro de Usuario
+        form(method="post")
+            label.form-label(for="username") Usuario:
+            input.form-control(id="username", type="text", name="username", placeholder="Introduce tu usuario")
 
-        div.container
-            form(method="post") 
+            label.form-label(for="password") Contraseña:
+            input.form-control(id="password", type="password", name="password", placeholder="Introduce tu contraseña")
 
-                label.form-label(for="username") Usuario:
-                input.form-control(id="username", type="text", name="username")
-                
-                label.form-label(for="password") Contraseña:
-                input.form-control(id="password", type="password", name="password")
-                
-                label.form-label(for="email") Email:
-                input.form-control(id="email", type="email", name="email", placeholder="usuario@correo.com")
-                
-                label.form-label(for="direccion") Dirección:
-                input.form-control(id="direccion", type="text", name="direccion", placeholder="Paseo de la Estación 44, JAEN")
-                
-                label.form-label(for="telefono") Teléfono:
-                input.form-control(id="telefono", type="tel", name="telefono", pattern="[0-9]{6}", placeholder="555-123-456")
-                
+            label.form-label(for="email") Email:
+            input.form-control(id="email", type="email", name="email", placeholder="usuario@correo.com")
 
-                button.btn.btn-primary(type="submit") ¡Registrarse!
-        
+            label.form-label(for="direccion") Dirección:
+            input.form-control(id="direccion", type="text", name="direccion", placeholder="Paseo de la Estación 44, JAEN")
+
+            label.form-label(for="telefono") Teléfono:
+            input.form-control(id="telefono", type="tel", name="telefono", pattern="[0-9]{6}", placeholder="555-123-456")
+
+            button.btn.btn-dark(type="submit") ¡Registrarse!
+
+    style.
+        .form-container {
+            background-color: #1c1c1c;
+            padding: 25px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            max-width: 500px;
+            margin: 60px auto;
+            color: #f5f5f5;
+        }
+
+        .form-label {
+            margin-top: 10px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            background-color: #333;
+            color: #f5f5f5;
+            border: 1px solid #555;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+
+        .form-control::placeholder {
+            color: #b0b0b0;
+        }
+
+        .btn-dark {
+            width: 100%;
+            margin-top: 15px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-dark:hover {
+            background-color: #555;
+        }

@@ -1,27 +1,89 @@
 extends ../layouts/main
 
 block contenido
+    style.
+        .table-container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
 
-        h2 Listado de camisetas
-        if mensaje!=null
-            p= mensaje
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: center;
+        }
+
+        thead {
+            background-color: #343a40;
+            color: #f5f5f5;
+            font-weight: bold;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tbody tr:hover {
+            background-color: #e0e0e0;
+        }
+
+        .btn {
+            padding: 6px 12px;
+            border-radius: 5px;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+            border: none;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+        }
+
+        span.color-box {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 1px solid #333;
+        }
+
+    .table-container
+        h2.text-center Listado de camisetas
+        if mensaje != null
+            p.text-center(style="color:#dc3545")= mensaje
         table.table
-            thead 
-                tr 
-                    th talla 
-                    th sexo 
-                    th color 
-                    th marca 
-                    th precio
-                    th acción
-            tbody 
+            thead
+                tr
+                    th Talla
+                    th Sexo
+                    th Color
+                    th Marca
+                    th Precio
+                    th Acción
+            tbody
                 each camiseta in camisetas
-                    tr 
-                        td=camiseta.talla 
-                        td=camiseta.sexo 
+                    tr
+                        td= camiseta.talla
+                        td= camiseta.sexo
                         td
-                            span(style=`color:${camiseta.color}`)=camiseta.color 
-                        td=camiseta.marca 
-                        td=camiseta.precio 
+                            span.color-box(style=`background-color:${camiseta.color}` title=camiseta.color)
+                        td= camiseta.marca
+                        td= camiseta.precio
                         td
                             a.btn.btn-success(href=`/carro/add/camiseta/${camiseta.id}`) Añadir a la cesta

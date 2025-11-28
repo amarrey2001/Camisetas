@@ -1,38 +1,46 @@
-nav.navbar.navbar-expand-lg.navbar-dark.bg-dark.mb-4
-    .container
-        a.navbar-brand(href="/") Tienda Camisetas
+nav.navbar.navbar-expand-lg.mb-4.shadow-sm.p-3(style="background-color: #1c1c1c; font-family: 'Poppins', sans-serif;")
+    .container-fluid
+        //- TITULO PEGADO A LA IZQUIERDA
+        a.navbar-brand.text-uppercase.fw-bold.fs-4.me-0(style="color: #f5f5f5; letter-spacing: 1px;", href="/") Tienda Camisetas
 
-        button.navbar-toggler(type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav")
-            span.navbar-toggler-icon
+        button.navbar-toggler(type="button", data-bs-toggle="collapse", data-bs-target="#navbarNav", aria-controls="navbarNav", aria-expanded="false", aria-label="Toggle navigation")
+            span.navbar-toggler-icon(style="filter: invert(1);")
 
         #navbarNav.collapse.navbar-collapse
-            //- MENU IZQUIERDA (me-auto)
+            //- MENU IZQUIERDA
             ul.navbar-nav.me-auto
-                //- Enlaces para todos (públicos)
                 li.nav-item
-                    a.nav-link(href="/") Catálogo
+                    a.nav-link.fw-semibold.px-3(href="/", style="color:#f5f5f5; transition: all 0.3s;") Catálogo
                 li.nav-item
-                    a.nav-link(href="/carro") Mi Cesta
+                    a.nav-link.fw-semibold.px-3(href="/carro", style="color:#f5f5f5; transition: all 0.3s;") Mi Cesta
 
-                //- Opciones específicas según rol
                 if user
                     if user.tipo == 'OPERADOR'
                         li.nav-item
-                            a.nav-link.text-warning(href="/admin/camiseta") Admin Camisetas
+                            a.nav-link.fw-bold.px-3(style="color:#f5f5f5; transition: all 0.3s;", href="/admin/camiseta") Admin Camisetas
                         li.nav-item
-                            a.nav-link.text-warning(href="/admin/pedido") Admin Pedidos
+                            a.nav-link.fw-bold.px-3(style="color:#f5f5f5; transition: all 0.3s;", href="/admin/pedido") Admin Pedidos
 
-            //- MENU DERECHA (ms-auto)
-            ul.navbar-nav.ms-auto
+            //- MENU DERECHA
+            ul.navbar-nav.ms-auto.align-items-center
                 if user
-                    //- OPCIÓN A: Usuario Logueado
-                    li.nav-item.d-flex.align-items-center
-                        span.text-light.me-3 Hola, #{user.username}
+                    li.nav-item.me-3
+                        span.text-light.fw-bold Hola, #{user.username}
                     li.nav-item
-                        a.btn.btn-outline-danger.btn-sm(href="/auth/logout") Cerrar Sesión
+                        a.btn.btn-outline-light.btn-sm.text-uppercase.fw-bold.px-3.py-2(style="transition: all 0.3s;",href="/auth/logout") Cerrar Sesión
                 else
-                    //- OPCIÓN B: Invitado (No logueado)
+                    li.nav-item.me-2
+                        a.nav-link.btn.btn-outline-light.btn-sm.fw-bold.px-3.py-2(style="transition: all 0.3s;",href="/auth/login") Iniciar Sesión
                     li.nav-item
-                        a.nav-link(href="/auth/login") Iniciar Sesión
-                    li.nav-item
-                        a.nav-link(href="/auth/register") Registrarse
+                        a.nav-link.btn.btn-light.btn-sm.text-dark.fw-bold.px-3.py-2(style="color: #1c1c1c; transition: all 0.3s;",href="/auth/register") Registrarse
+
+//- HOVER MODERNO
+style.
+    .navbar-nav .nav-link:hover {
+        color: #ffd700 !important;
+        text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    }
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }

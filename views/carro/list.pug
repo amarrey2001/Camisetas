@@ -1,12 +1,12 @@
 extends ../layouts/main
 
 block contenido
-    h2.mt-4 Mi Cesta de la Compra
+    h2.mt-4.text-center(style="color:#f5f5f5;") Mi Cesta de la Compra
 
     if items && items.length > 0
         div.table-responsive.mt-4
-            table.table.table-hover.align-middle
-                thead.table-light
+            table.table.table-dark.table-hover.align-middle
+                thead(style="background-color:#1c1c1c; color:#f5f5f5;")
                     tr
                         th Producto
                         th.text-center Precio
@@ -20,35 +20,34 @@ block contenido
                             td
                                 div.d-flex.align-items-center
                                     //- Círculo de color
-                                    div(style=`width: 30px; height: 30px; border-radius: 50%; background-color: ${item.color}; border: 1px solid #ccc; margin-right: 15px;`)
+                                    div(style=`width: 30px; height: 30px; border-radius: 50%; background-color: ${item.color}; border: 1px solid #333; margin-right: 15px;`)
 
                                     div
-                                        h5.mb-0= item.marca
-                                        small.text-muted Talla: #{item.talla.toUpperCase()} | #{item.sexo}
+                                        h5.mb-0(style="color:#f5f5f5;")= item.marca
+                                        small.text-muted(style="color:#b0b0b0;") Talla: #{item.talla.toUpperCase()} | #{item.sexo}
 
                             //- Columna Precio
-                            td.text-center #{Number(item.precio_unitario).toFixed(2)} €
+                            td.text-center(style="color:#f5f5f5;") #{Number(item.precio_unitario).toFixed(2)} €
 
                             //- Columna Cantidad
-                            td.text-center
+                            td.text-center(style="color:#f5f5f5;")
                                 strong #{item.cantidad}
 
                             //- Columna Subtotal
-                            td.text-end.fw-bold #{Number(item.subtotal).toFixed(2)} €
+                            td.text-end.fw-bold(style="color:#f5f5f5;") #{Number(item.subtotal).toFixed(2)} €
 
                             //- Columna Acciones (Botón Eliminar)
                             td.text-center
                                 form(action=`/carro/delete/${item.id}`, method="POST")
                                     button.btn.btn-outline-danger.btn-sm(type="submit") Eliminar
 
-        //- Sección de Totales y Botones (AQUÍ ESTABA EL ERROR DE INDENTACIÓN)
-        //- Fíjate que este div está alineado con el div.table-responsive de arriba, NO dentro del bucle
+        //- Sección de Totales y Botones
         div.row.mt-4.mb-5
             div.col-md-6
                 a.btn.btn-secondary(href="/") Seguir comprando
 
             div.col-md-6.text-end
-                div.card.bg-light
+                div.card.bg-dark(style="border:none;")
                     div.card-body
                         //- Total General
                         h4 Total a Pagar:
