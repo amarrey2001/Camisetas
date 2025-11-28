@@ -1,44 +1,89 @@
 extends ../layouts/main
 
 block contenido
-
-        h2 Añadir camiseta             
-
-        form(method="POST")    
-            label.form-label(for="talla") 
-            select(name="talla", id="talla", required) 
-                option(value="xxs") XXS 
+    .form-container
+        h2 Añadir Camiseta
+        form(method="POST")
+            label.form-label(for="talla") Talla
+            select.form-control(name="talla", id="talla", required)
+                option(value="xxs") XXS
                 option(value="xs") XS
                 option(value="s") S
                 option(value="m") M
                 option(value="l") L
                 option(value="xl") XL
                 option(value="xxl") XXL
-            <br>
-            label.form-label(for="sexo") 
-            select(name="sexo", id="sexo", required) 
-                option(value="chica") chica 
+
+            label.form-label(for="sexo") Sexo
+            select.form-control(name="sexo", id="sexo", required)
+                option(value="chica") chica
                 option(value="chico") chico
                 option(value="unisex") unisex
                 option(value="niño") niño
                 option(value="niña") niña
                 option(value="unisex_infantil") unisex_infantil
-            <br>
+
             label.form-label(for="color") Color
             input.form-control(type="color", name="color", id="color", required)
-            <br>
+
             label.form-label(for="marca") Marca
             input.form-control(type="marca", name="marca", id="marca", required)
-            <br>
+
             label.form-label(for="stock") Stock
-            input.form-control(type="number", name="stock", id="stock" min="0" max="1000", required)
-            <br>    
-            label.form-label(for="precio") Precio 
-            input.form-control(type="number",  name="precio", id="precio", step="any", required)
-            <br>
-            
+            input.form-control(type="number", name="stock", id="stock", min="0", max="1000", required)
+
+            label.form-label(for="precio") Precio
+            input.form-control(type="number", name="precio", id="precio", step="any", required)
+
             label.form-check-label(for="activo") Activo
             input.form-check-input(type="checkbox", name="activo", id="activo")
-            <br>
-            button.btn.btn-primary(type="submit") Enviar 
-            button.btn.btn-danger(type="reset") Cancelar
+
+            div.mt-3
+                button.btn.btn-dark(type="submit") Enviar
+                button.btn.btn-danger(type="reset") Cancelar
+
+    style.
+        .form-container {
+            background-color: #1c1c1c;
+            padding: 25px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            max-width: 500px;
+            margin: 40px auto;
+            color: #f5f5f5;
+        }
+
+        .form-label {
+            margin-top: 10px;
+            font-weight: 500;
+        }
+
+        .form-control, select.form-control {
+            background-color: #333;
+            color: #f5f5f5;
+            border: 1px solid #555;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+
+        .form-check-input {
+            background-color: #333;
+            border: 1px solid #555;
+            margin-top: 5px;
+            margin-right: 5px;
+        }
+
+        .btn-dark {
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-right: 10px;
+        }
+
+        .btn-dark:hover {
+            background-color: #555;
+        }
+
+        .btn-danger:hover {
+            background-color: #a71d2a;
+        }

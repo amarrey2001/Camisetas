@@ -2,45 +2,117 @@ extends ../layouts/main
 
 block contenido
 
-        h2 Editar camiseta             
+    style.
+        .form-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+        }
 
+        .form-container {
+            background-color: #ffffff;
+            padding: 25px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 500px;
+        }
 
-        form(method="POST")    
-            label.form-label(for="talla") Talla: 
-            select(name="talla", id="talla", required) 
-                option(value="xxs", selected=(datos.talla=="xxs")) XXS 
-                option(value="xs", selected=(datos.talla=="xs")) XS
-                option(value="s", selected=(datos.talla=="s")) S
-                option(value="m", selected=(datos.talla=="m")) M
-                option(value="l", selected=(datos.talla=="l")) L
-                option(value="xl", selected=(datos.talla=="xl")) XL
-                option(value="xxl", selected=(datos.talla=="xxl")) XXL
-            <br>
-            label.form-label(for="sexo") Sexo: 
-            select(name="sexo", id="sexo", required, value=datos.sexo) 
-                option(value="chica", selected=(datos.sexo=="chica")) chica 
-                option(value="chico", selected=(datos.sexo=="chico")) chico
-                option(value="unisex", selected=(datos.sexo=="unisex")) unisex
-                option(value="niño", selected=(datos.sexo=="niño")) niño
-                option(value="niña", selected=(datos.sexo=="niña")) niña
-                option(value="unisex_infantil", selected=(datos.sexo=="unisex_infantil")) unisex_infantil
-            <br>
-            label.form-label(for="color") Color
-            input.form-control(type="color", name="color", id="color", required, value=datos.color)
-            <br>
-            label.form-label(for="marca") Marca
-            input.form-control(type="marca", name="marca", id="marca", required, value=datos.marca)
-            <br>
-            label.form-label(for="stock") Stock
-            input.form-control(type="number", name="stock", id="stock" min="0" max="1000", required, value=datos.stock)
-            <br>    
-            label.form-label(for="precio") Precio 
-            input.form-control(type="number",  name="precio", id="precio", step="any", required, value=datos.precio)
-            <br>
-            
-            label.form-check-label(for="activo") Activo
-            input.form-check-input(type="checkbox", name="activo", id="activo", checked= datos.activo==1)
-            <br>
-            button.btn.btn-info(type="submit") Enviar 
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
 
-            button.btn.btn-danger(type="reset") Cancelar
+        .form-label {
+            display: block;
+            margin-top: 10px;
+            font-weight: 500;
+            color: #555;
+        }
+
+        .form-control, select {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #000000;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .form-check-input {
+            margin-top: 5px;
+            margin-right: 5px;
+        }
+
+        .btn {
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            width: 48%;
+            margin-top: 10px;
+        }
+
+        .btn-info {
+            background-color: #17a2b8;
+            color: white;
+            margin-right: 4%;
+        }
+
+        .btn-info:hover {
+            background-color: #117a8b;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #a71d2a;
+        }
+
+    div.form-wrapper
+        div.form-container
+            h2 Editar camiseta
+
+            form(method="POST")
+                label.form-label(for="talla") Talla:
+                select(name="talla", id="talla", required)
+                    option(value="xxs", selected=(datos.talla=="xxs")) XXS
+                    option(value="xs", selected=(datos.talla=="xs")) XS
+                    option(value="s", selected=(datos.talla=="s")) S
+                    option(value="m", selected=(datos.talla=="m")) M
+                    option(value="l", selected=(datos.talla=="l")) L
+                    option(value="xl", selected=(datos.talla=="xl")) XL
+                    option(value="xxl", selected=(datos.talla=="xxl")) XXL
+
+                label.form-label(for="sexo") Sexo:
+                select(name="sexo", id="sexo", required)
+                    option(value="chica", selected=(datos.sexo=="chica")) chica
+                    option(value="chico", selected=(datos.sexo=="chico")) chico
+                    option(value="unisex", selected=(datos.sexo=="unisex")) unisex
+                    option(value="niño", selected=(datos.sexo=="niño")) niño
+                    option(value="niña", selected=(datos.sexo=="niña")) niña
+                    option(value="unisex_infantil", selected=(datos.sexo=="unisex_infantil")) unisex_infantil
+
+                label.form-label(for="color") Color:
+                input.form-control(type="color", name="color", id="color", required, value=datos.color)
+
+                label.form-label(for="marca") Marca:
+                input.form-control(type="marca", name="marca", id="marca", required, value=datos.marca)
+
+                label.form-label(for="stock") Stock:
+                input.form-control(type="number", name="stock", id="stock", min="0", max="1000", required, value=datos.stock)
+
+                label.form-label(for="precio") Precio:
+                input.form-control(type="number", name="precio", id="precio", step="any", required, value=datos.precio)
+
+                label.form-check-label(for="activo", style="color: #000") Activo:
+                input.form-check-input(type="checkbox", name="activo", id="activo", checked=datos.activo==1)
+
+                div
+                    button.btn.btn-info(type="submit") Enviar
+                    button.btn.btn-danger(type="reset") Cancelar

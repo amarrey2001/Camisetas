@@ -1,17 +1,57 @@
 extends ../layouts/main
 
 block contenido
+    .form-container
+        h2 Iniciar Sesión
+        form(method="post")
+            label.form-label(for="username") Usuario:
+            input.form-control(id="username", type="text", name="username", placeholder="Introduce tu usuario")
 
-        div 
-            form(method="post") 
-                label.form-label(for="username") Usuario:
-                input.form-control(id="username", type="text", name="username")
-                br
-                label.form-label(for="password") Contraseña:
-                input.form-control(id="password", type="password", name="password")
-                br
-                button.btn.btn-primary(type="submit") ¡Enviar!
-        div 
-            p ¿No está registrado aún?
-            p 
-                a.btn.btn-primary(href="register") Registrarse
+            label.form-label(for="password") Contraseña:
+            input.form-control(id="password", type="password", name="password", placeholder="Introduce tu contraseña")
+
+            button.btn.btn-dark(type="submit") ¡Enviar!
+
+        p.text-center.mt-3 ¿No estás registrado aún?
+        p.text-center
+            a.btn.btn-dark(href="register") Registrarse
+
+    style.
+        .form-container {
+            background-color: #1c1c1c;
+            padding: 25px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            max-width: 400px;
+            margin: 60px auto;
+            color: #f5f5f5;
+        }
+
+        .form-label {
+            margin-top: 10px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            background-color: #333;
+            color: #f5f5f5;
+            border: 1px solid #555;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+
+        .form-control::placeholder {
+            color: #b0b0b0;
+        }
+
+        .btn-dark {
+            width: 100%;
+            margin-top: 15px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-dark:hover {
+            background-color: #555;
+        }

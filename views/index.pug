@@ -1,6 +1,122 @@
 extends ./layouts/main
 
 block contenido
+    style.
+        .tienda-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px;
+        }
 
-        h2 Tienda de camisetas online
-        p Bienvenido a nuestra tienda online
+        .camiseta-card {
+            background-color: #1c1c1c;
+            color: #f5f5f5;
+            border: 1px solid #333;
+            padding: 15px;
+            border-radius: 10px;
+            width: 220px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .camiseta-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+        }
+
+        .camiseta-card h3 {
+            margin-top: 0;
+            font-size: 1.2em;
+            color: #f5f5f5;
+        }
+
+        .camiseta-card p {
+            color: #ccc;
+            font-size: 0.9em;
+            margin: 5px 0;
+        }
+
+        .camiseta-card h4 {
+            color: #ffd700;
+            font-size: 1.2em;
+            margin: 10px 0;
+        }
+
+        .color-circle {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 1px solid #333;
+        }
+
+        .btn-add {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            transition: all 0.2s;
+        }
+
+        .btn-add:hover {
+            background-color: #218838;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+        }
+
+        .btn-login {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: block;
+            width: 100%;
+            text-align: center;
+            margin-top: 10px;
+            transition: all 0.2s;
+        }
+
+        .btn-login:hover {
+            background-color: #0056b3;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+        }
+
+    h2(style="text-align:center; color:#f5f5f5; margin-bottom:10px;") Tienda de camisetas online
+    p(style="text-align:center; color:#ccc; margin-bottom:20px;") Bienvenido a nuestra tienda online
+
+    .tienda-container
+        if camisetas.length
+            each camiseta in camisetas
+                .camiseta-card
+                    h3= camiseta.marca
+                    p
+                        strong Talla:
+                        |  #{camiseta.talla.toUpperCase()}
+                        br
+                        span(style="color:#999; font-size:0.85em") (#{camiseta.sexo})
+
+                    div(style="margin:10px 0; display:flex; justify-content:center; gap:5px; align-items:center;")
+                        span Color:
+                        span.color-circle(style=`background-color: ${camiseta.color}`)
+
+                    h4 #{camiseta.precio} €
+
+                    if user
+                        form(action="/carro/add", method="POST")
+                            input(type="hidden", name="camiseta_id", value=camiseta.id)
+                            div(style="margin-bottom:10px;")
+                                label(for=`cant-${camiseta.id}`, style="font-size:0.85em;") Cantidad:
+                                input(id=`cant-${camiseta.id}`, type="number", name="cantidad", value="1", min="1", max=camiseta.stock, style="width:50px; text-align:center; border-radius:5px; border:1px solid #333; background:#2c2c2c; color:#f5f5f5;")
+                            button.btn-add(type="submit") Añadir a la cesta
+                    else
+                        a.btn-login(href="/auth/login") Añadir a la cesta
+        else
+            p(style="width:100%; text-align:center; color:#999;") No hay camisetas disponibles en este momento.
