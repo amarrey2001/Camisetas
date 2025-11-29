@@ -2,67 +2,98 @@ extends ./layouts/main
 
 block contenido
     style.
+        /* Contenedor principal limitado para que no se estire al infinito en pantallas muy anchas */
+        .main-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
         .tienda-container {
             display: flex;
             flex-wrap: wrap;
-            gap: 20px;
-            justify-content: center;
-            margin-top: 20px;
+            gap: 20px; /* Espacio entre tarjetas */
+            justify-content: flex-start; /* Alineado a la izquierda para mantener la grilla ordenada */
+            margin-top: 30px;
         }
 
         .camiseta-card {
             background-color: #1c1c1c;
             color: #f5f5f5;
             border: 1px solid #333;
-            padding: 15px;
-            border-radius: 10px;
-            width: 220px;
+            padding: 20px; /* Más relleno interno */
+            border-radius: 12px;
+
+            /* --- LÓGICA DE 3 POR FILA --- */
+            /* 100% del ancho dividido entre 3, menos el espacio del gap (20px) */
+            width: calc(33.333% - 20px);
+            box-sizing: border-box;
+
             text-align: center;
             box-shadow: 0 4px 10px rgba(0,0,0,0.4);
             transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .camiseta-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.7);
+            border-color: #555;
+        }
+
+        /* Imagen más grande y controlada */
+        .card-image {
+            width: 100%;
+            height: 300px; /* Altura fija para que todas sean iguales */
+            object-fit: cover; /* Recorta la imagen para llenar el espacio sin deformar */
+            border-radius: 8px;
+            margin-bottom: 15px;
         }
 
         .camiseta-card h3 {
             margin-top: 0;
-            font-size: 1.2em;
+            font-size: 1.5em; /* Fuente más grande */
             color: #f5f5f5;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .camiseta-card p {
             color: #ccc;
-            font-size: 0.9em;
-            margin: 5px 0;
+            font-size: 1.1em; /* Texto descriptivo más grande */
+            margin: 8px 0;
         }
 
         .camiseta-card h4 {
             color: #ffd700;
-            font-size: 1.2em;
-            margin: 10px 0;
+            font-size: 1.8em; /* Precio destacado */
+            margin: 15px 0;
+            font-weight: bold;
         }
 
         .color-circle {
             display: inline-block;
-            width: 20px;
-            height: 20px;
+            width: 25px; /* Círculo de color más grande */
+            height: 25px;
             border-radius: 50%;
-            border: 1px solid #333;
+            border: 2px solid #555;
+            box-shadow: 0 0 5px rgba(0,0,0,0.5);
         }
 
         .btn-add {
             background-color: #28a745;
             color: white;
             border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
+            padding: 12px 20px; /* Botón más grande */
+            font-size: 1.1em;
+            border-radius: 6px;
             cursor: pointer;
             width: 100%;
-            margin-top: 10px;
+            margin-top: auto; /* Empuja el botón al final */
             transition: all 0.2s;
+            font-weight: bold;
         }
 
         .btn-add:hover {
@@ -74,53 +105,66 @@ block contenido
             background-color: #007bff;
             color: white;
             border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
+            padding: 12px 20px;
+            font-size: 1.1em;
+            border-radius: 6px;
             text-decoration: none;
             display: block;
             width: 100%;
             text-align: center;
-            margin-top: 10px;
+            margin-top: auto;
             transition: all 0.2s;
         }
 
         .btn-login:hover {
             background-color: #0056b3;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
         }
 
-    h2(style="text-align:center; color:#f5f5f5; margin-bottom:10px;") Tienda de camisetas online
-    p(style="text-align:center; color:#ccc; margin-bottom:20px;") Bienvenido a nuestra tienda online
+        /* RESPONSIVE: Para móviles, que no se vean 3 columnas aplastadas */
+        @media (max-width: 900px) {
+            .camiseta-card {
+                width: calc(50% - 20px); /* 2 por fila en tablets */
+            }
+        }
+        @media (max-width: 600px) {
+            .camiseta-card {
+                width: 100%; /* 1 por fila en móviles */
+            }
+        }
 
-    .tienda-container
-        if camisetas.length
-            each camiseta in camisetas
-                .camiseta-card
-                    // Imagen genérica de camiseta
-                    img(src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=500&q=60", alt="Camiseta genérica", style="width:100%; border-radius:8px; margin-bottom:10px;")
+    .main-wrapper
+        h2(style="text-align:center; color:#f5f5f5; margin-bottom:10px; font-size: 2.5em;") Tienda de camisetas online
+        p(style="text-align:center; color:#ccc; margin-bottom:40px; font-size: 1.2em;") Bienvenido a nuestra tienda online
 
-                    h3= camiseta.marca
-                    p
-                        strong Talla:
-                        |  #{camiseta.talla.toUpperCase()}
-                        br
-                        span(style="color:#999; font-size:0.85em") (#{camiseta.sexo})
+        .tienda-container
+            if camisetas.length
+                each camiseta in camisetas
+                    .camiseta-card
+                        // Imagen controlada con clase CSS
+                        img.card-image(src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=800&q=80", alt="Camiseta")
 
-                    div(style="margin:10px 0; display:flex; justify-content:center; gap:5px; align-items:center;")
-                        span Color:
-                        span.color-circle(style=`background-color: ${camiseta.color}`)
+                        h3= camiseta.marca
 
-                    h4 #{camiseta.precio} €
+                        div(style="margin:15px 0; display:flex; justify-content:center; gap:10px; align-items:center;")
+                            span.color-circle(style=`background-color: ${camiseta.color}`, title=`Color: ${camiseta.color}`)
+                            span(style="color:#ccc;") |
+                            span #{camiseta.talla.toUpperCase()}
+                            span(style="color:#999; font-size:0.8em") (#{camiseta.sexo})
 
-                    if user
-                        form(action="/carro/add", method="POST")
-                            input(type="hidden", name="camiseta_id", value=camiseta.id)
-                            div(style="margin-bottom:10px;")
-                                label(for=`cant-${camiseta.id}`, style="font-size:0.85em;") Cantidad:
-                                input(id=`cant-${camiseta.id}`, type="number", name="cantidad", value="1", min="1", max=camiseta.stock, style="width:50px; text-align:center; border-radius:5px; border:1px solid #333; background:#2c2c2c; color:#f5f5f5;")
-                            button.btn-add(type="submit") Añadir a la cesta
-                    else
-                        a.btn-login(href="/auth/login") Añadir a la cesta
+                        h4 #{camiseta.precio} €
 
-        else
-            p(style="width:100%; text-align:center; color:#999;") No hay camisetas disponibles en este momento.
+                        if user
+                            form(action="/carro/add", method="POST")
+                                input(type="hidden", name="camiseta_id", value=camiseta.id)
+                                div(style="margin-bottom:15px; display:flex; justify-content:center; align-items:center; gap: 10px;")
+                                    label(for=`cant-${camiseta.id}`, style="font-size:1em;") Cantidad:
+                                    input(id=`cant-${camiseta.id}`, type="number", name="cantidad", value="1", min="1", max=camiseta.stock, style="width:60px; padding: 5px; text-align:center; border-radius:5px; border:1px solid #555; background:#2c2c2c; color:#fff; font-size: 1.1em;")
+                                button.btn-add(type="submit") Añadir al carrito
+                        else
+                            a.btn-login(href="/auth/login") Iniciar sesión para comprar
+
+
+            else
+                p(style="width:100%; text-align:center; color:#999; font-size: 1.5em; margin-top: 50px;") No hay camisetas disponibles en este momento.
+
+        br
