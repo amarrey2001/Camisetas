@@ -96,6 +96,9 @@ block contenido
         if camisetas.length
             each camiseta in camisetas
                 .camiseta-card
+                    // Imagen genérica de camiseta
+                    img(src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=500&q=60", alt="Camiseta genérica", style="width:100%; border-radius:8px; margin-bottom:10px;")
+
                     h3= camiseta.marca
                     p
                         strong Talla:
@@ -118,5 +121,6 @@ block contenido
                             button.btn-add(type="submit") Añadir a la cesta
                     else
                         a.btn-login(href="/auth/login") Añadir a la cesta
+
         else
             p(style="width:100%; text-align:center; color:#999;") No hay camisetas disponibles en este momento.

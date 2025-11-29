@@ -102,42 +102,24 @@ block contenido
         }
 
     .pedidos-container
-        h2 Listado de pedidos
+        h2 Mis pedidos
 
-        if mensaje!=null
-            p= mensaje
-
-        table.table
-            thead
-                tr
-                    th ID
-                    th Camiseta
-                    th Cantidad
-                    th Cliente
-                    th Método de pago
-                    th Fecha
-                    th Estado
-                    th Pagado
-                    th Ver
-                    th Editar
-                    th Borrar
-            tbody
-                each pedido in pedidos
+        if pedidos.length
+            table.table
+                thead
                     tr
-                        td= pedido.id
-                        td #{pedido.camiseta.marca} - #{pedido.camiseta.talla} (#{pedido.camiseta.color})
-                        td= pedido.cantidad
-                        td= pedido.cliente
-                        td= pedido.metodoPago
-                        td= pedido.fecha
-                        td= pedido.estado
-                        td= pedido.pagado==1
-                        td
-                            a.btn.btn-primary(href=`/admin/pedido/${pedido.id}`) Ver
-                        td
-                            a.btn.btn-success(href=`/admin/pedido/edit/${pedido.id}`) Editar
-                        td
-                            a.btn.btn-danger(href=`/admin/pedido/del/${pedido.id}`) Borrar
-
-        p
-            a.add-pedido(href="/admin/pedido/add") Añadir un nuevo pedido
+                        th Fecha
+                        th Estado
+                        th Total
+                        th Camiseta
+                        th Precio Venta
+                tbody
+                    each pedido in pedidos
+                        tr
+                            td= pedido.fecha
+                            td= pedido.estado
+                            td #{pedido.total}€
+                            td #{pedido.marca} - #{pedido.talla}
+                            td #{pedido.Precio_Venta}€
+        else
+            p No has realizado ningún pedido todavía.

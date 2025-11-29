@@ -4,6 +4,8 @@ const pedidoController = require('../controllers/pedidoController')
 
 router.get('/', pedidoController.pedidos)
 
+router.get('/mis-pedidos', pedidoController.pedidos);
+
 router.get('/crear', pedidoController.pedidoCreateForm)
 router.post('/crear', pedidoController.pedidoCreate)
 
