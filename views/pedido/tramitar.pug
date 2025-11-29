@@ -1,0 +1,66 @@
+extends ../layouts/main
+
+block contenido
+
+    h2 Tramitar pedido
+
+    //--- Datos del usuario ---
+    .card.p-3.mb-3
+        h4 Datos del cliente
+        p
+            strong Nombre de usuario:
+            |  #{usuario.username}
+        if usuario.email
+            p
+                strong Email:
+                |  #{usuario.email}
+        if usuario.direccion
+            p
+                strong Dirección:
+                |  #{usuario.direccion}
+
+    //--- Carrito ---
+    .card.p-3.mb-3
+        h4 Tu carrito
+
+        if carrito.length === 0
+            p No tienes artículos en el carrito.
+        else
+            table.table.table-striped
+                thead
+                    tr
+                        th Camiseta
+                        th Cantidad
+                        th Precio unitario
+                        th Subtotal
+                tbody
+                    each linea in carrito
+                        tr
+                            td #{linea.marca} - #{linea.talla} (#{linea.color})
+                            td #{linea.cantidad}
+                            td #{linea.precio_unitario} €
+                            td #{linea.subtotal} €
+
+            h4.mt-3
+                strong Total del pedido: #{total} €
+
+    //--- Formulario de confirmación ---
+    form(method="POST", action="/pedido/confirmar")
+
+        // Usuario oculto
+        input(type="hidden", name="clienteId", value=usuario.id)
+
+        // Total oculto
+        input(type="hidden", name="total", value=total)
+
+        label.form-label(for="metodoPago") Método de pago:
+        select.form-select(name="metodoPago", id="metodoPago", required)
+            option(value="tarjeta") Tarjeta
+            option(value="paypal") PayPal
+            option(value="efectivo") Efectivo
+            option(value="transferencia") Transferencia
+        br
+
+        button.btn.btn-success(type="submit") Confirmar pedido
+        a.btn.btn-danger(href="/carro") Cancelar
+

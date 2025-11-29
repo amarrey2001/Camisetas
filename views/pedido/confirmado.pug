@@ -1,0 +1,12 @@
+extends ../layouts/main
+
+block contenido
+    .card.p-3.mt-4
+        h2 Pedido Confirmado
+        p
+            | Gracias #{pedido.username}, tu pedido ha sido confirmado.
+        p
+            | Total: #{pedido.total} €
+        p
+            | Estado: #{pedido.estado}
+        a.btn.btn-primary.mt-3(href="/") Volver al catálogo
