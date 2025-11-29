@@ -50,22 +50,29 @@ exports.pedidoCreate = (req, res) => {
 
 exports.pedido = (req, res) => {
     const { id } = req.params;
-    if (isNaN(id)){
-        return res.render(
-            'error',
-            {mensaje:'PEDIDO GETONE PARAMETROS INCORRECTOS'})
-    }
-    let query = 'SELECT * FROM pedido where id=?'
 
-    db.query(query, id, (error, resultado)=>{
+    if (isNaN(id)) {
+        return res.render('error', {
+            mensaje: 'PEDIDO GETONE PARAMETROS INCORRECTOS'
+        });
+    }
+
+    let query = 'SELECT * FROM pedido WHERE id = ?';
+
+    db.query(query, [id], (error, resultado) => {
         if (error) {
             return res.render('error', {
-                mensaje: 'Imposible acceder a el pedido'})
-        } else {
-            return res.render('pedido/list', {pedidos: resultado})
+                mensaje: 'Imposible acceder al pedido'
+            });
         }
-    })
-}
+
+        if (resultado.length === 0) {
+            return res.render('error', { mensaje: 'Pedido no encontrado' });
+        }
+
+        return res.render('pedido/detalle', { pedido: resultado[0] });
+    });
+};
 
 exports.pedidoUpdateForm = (req, res) => {
     const { id } = req.params;
@@ -110,5 +117,113 @@ exports.pedidoUpdate = (req, res) => {
         } else {
             return res.redirect('/admin/pedido');
         }
+    });
+};
+
+exports.tramitarPedidoForm = (req, res) => {
+    const usuario = req.session.user;
+
+    const usuarioId = usuario.id;
+
+    const sql = `
+        SELECT c.*, cam.marca, cam.talla, cam.color
+        FROM carrito c
+                 JOIN camiseta cam ON cam.id = c.camiseta
+        WHERE c.usuario = ?
+    `;
+
+    db.query(sql, [usuarioId], (err, carrito) => {
+        if (err) {
+            console.log(err);
+            return res.render("error", { mensaje: "Error al cargar el carrito" });
+        }
+
+        const total = carrito.reduce((acc, item) => acc + parseFloat(item.subtotal), 0);
+
+        res.render("pedido/tramitar", {
+            usuario,   // ahora siempre definido
+            carrito,
+            total
+        });
+    });
+};
+
+
+exports.tramitarPedido = (req, res) => {
+    const usuarioId = req.session.user?.id;
+    const { metodoPago } = req.body;
+
+    // 1. Obtener carrito del usuario
+    const sqlCarrito = "SELECT * FROM carrito WHERE usuario = ?";
+
+    db.query(sqlCarrito, [usuarioId], (err, carrito) => {
+        if (err || carrito.length === 0) {
+            console.log(err);
+            return res.render("error", { mensaje: "No se pudo cargar el carrito" });
+        }
+
+        const total = carrito.reduce((t, item) => t + parseFloat(item.subtotal), 0);
+
+        // 2. Crear pedido
+        const sqlPedido = `
+            INSERT INTO pedido (cliente, total, estado)
+            VALUES (?, ?, 'pagado')
+        `;
+
+        db.query(sqlPedido, [usuarioId, total], (err, resultado) => {
+            if (err) {
+                console.log(err);
+                return res.render("error", { mensaje: "No se pudo crear el pedido" });
+            }
+
+            const pedidoId = resultado.insertId;
+
+            // 3. Crear líneas de pedido
+            const sqlLinea = `
+                INSERT INTO linea_pedido (ID_Pedido, ID_Camiseta, Precio_Venta)
+                VALUES (?, ?, ?)
+            `;
+
+            carrito.forEach(item => {
+                db.query(sqlLinea,
+                    [pedidoId, item.camiseta, item.precio_unitario],
+                    (err) => {
+                        if (err) console.log("Error línea pedido:", err);
+                    }
+                );
+            });
+
+            // 4. Vaciar carrito
+            const sqlVaciar = "DELETE FROM carrito WHERE usuario = ?";
+
+            db.query(sqlVaciar, [usuarioId], (err) => {
+                if (err) console.log("Error vaciando carrito:", err);
+            });
+
+            // 5. Redirigir a detalle del pedido
+            res.redirect(`/pedido/confirmado/${pedidoId}`);
+        });
+    });
+};
+
+exports.pedidoConfirmado = (req, res) => {
+    const usuario = req.session.user;
+    const { id } = req.params;
+
+    const sql = `
+        SELECT p.*, u.username
+        FROM pedido p
+        JOIN usuario u ON u.id = p.cliente
+        WHERE p.id = ?
+    `;
+
+    db.query(sql, [id], (err, resultado) => {
+        if (err || resultado.length === 0) {
+            return res.render("error", { mensaje: "Pedido no encontrado" });
+        }
+
+        res.render("pedido/confirmado", {
+            pedido: resultado[0]
+        });
     });
 };
