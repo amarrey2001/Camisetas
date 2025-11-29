@@ -1,18 +1,34 @@
 const { urlencoded } = require('body-parser')
 const db = require('../db')
 
-exports.pedidos = (req, res) => {
-    let query = 'SELECT * FROM pedido'
 
-    db.query(query, (error, resultado) =>{
-        if (error) {
-            return res.render('error', {
-                mensaje: 'Imposible acceder a los pedidos'})
-        } else {
-            return res.render('pedido/list', {pedidos: resultado})
+exports.pedidos = (req, res) => {
+    const usuarioId = req.session.user?.id;
+
+    if (!usuarioId) {
+        return res.render('error', { mensaje: 'Debes iniciar sesión para ver tus pedidos' });
+    }
+
+    const sql = `
+        SELECT p.id, p.fecha, p.estado, p.total,
+               cam.marca, cam.talla, cam.color, lp.Precio_Venta
+        FROM pedido p
+                 JOIN linea_pedido lp ON lp.ID_Pedido = p.id
+                 JOIN camiseta cam ON cam.id = lp.ID_Camiseta
+        WHERE p.cliente = ?
+        ORDER BY p.fecha DESC
+    `;
+
+    db.query(sql, [usuarioId], (err, pedidos) => {
+        if (err) {
+            console.log("Error SQL:", err);
+            return res.render('error', { mensaje: 'Imposible acceder a tus pedidos' });
         }
-    })
-}
+
+        res.render('pedido/list', { pedidos });
+    });
+};
+
 
 exports.pedidoCreateForm = (req, res) => {
     const query = 'SELECT * FROM camiseta';
