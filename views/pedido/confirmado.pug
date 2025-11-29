@@ -2,7 +2,6 @@ extends ../layouts/main
 
 block contenido
     style.
-
         .card {
             background-color: #1c1c1c;
             color: #f5f5f5;
@@ -67,23 +66,10 @@ block contenido
 
     .card
         h2 Pedido Confirmado
-        p Gracias #{pedido.username}, tu pedido ha sido confirmado.
+        p Gracias #{pedido.username ? pedido.username : 'Cliente'}, tu pedido ha sido confirmado.
         p Total: #{pedido.total} €
         p Estado: #{pedido.estado}
 
-        table
-            thead
-                tr
-                    th Producto
-                    th Cantidad
-                    th Precio
-                    th Subtotal
-            tbody
-                each linea in pedido.lineas
-                    tr
-                        td #{linea.marca} - #{linea.talla} (#{linea.color})
-                        td #{linea.cantidad}
-                        td #{linea.precio_unitario} €
-                        td #{linea.subtotal} €
+
 
         a.btn.btn-primary.mt-3(href="/") Volver al catálogo
