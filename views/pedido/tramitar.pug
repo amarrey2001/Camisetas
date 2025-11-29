@@ -1,11 +1,86 @@
 extends ../layouts/main
 
 block contenido
+    style.
+        .card {
+            background-color: #1c1c1c;
+            color: #f5f5f5;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        h2, h4 {
+            color: #ffd700;
+        }
+
+        label.form-label {
+            display: block;
+            margin-top: 15px;
+            font-weight: 500;
+            color: #f5f5f5;
+        }
+
+        select.form-select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #444;
+            background-color: #2c2c2c;
+            color: #f5f5f5;
+        }
+
+        table.table {
+            background-color: #2c2c2c;
+            color: #f5f5f5;
+        }
+
+        table.table th {
+            background-color: #333;
+        }
+
+        table.table td {
+            vertical-align: middle;
+        }
+
+        button.btn {
+            font-weight: bold;
+            border-radius: 6px;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            border: none;
+            color: #fff;
+        }
+
+        .btn-success:hover {
+            background-color: #1e7e34;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            border: none;
+            color: #fff;
+            margin-left: 10px;
+        }
+
+        .btn-danger:hover {
+            background-color: #a71d2a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        }
 
     h2 Tramitar pedido
 
     //--- Datos del usuario ---
-    .card.p-3.mb-3
+    .card
         h4 Datos del cliente
         p
             strong Nombre de usuario:
@@ -20,7 +95,7 @@ block contenido
                 |  #{usuario.direccion}
 
     //--- Carrito ---
-    .card.p-3.mb-3
+    .card
         h4 Tu carrito
 
         if carrito.length === 0
@@ -46,11 +121,7 @@ block contenido
 
     //--- Formulario de confirmación ---
     form(method="POST", action="/pedido/confirmar")
-
-        // Usuario oculto
         input(type="hidden", name="clienteId", value=usuario.id)
-
-        // Total oculto
         input(type="hidden", name="total", value=total)
 
         label.form-label(for="metodoPago") Método de pago:
@@ -63,4 +134,3 @@ block contenido
 
         button.btn.btn-success(type="submit") Confirmar pedido
         a.btn.btn-danger(href="/carro") Cancelar
-
