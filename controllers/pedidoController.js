@@ -15,21 +15,16 @@ exports.pedidos = (req, res) => {
 }
 
 exports.pedidoCreateForm = (req, res) => {
-    // 1. Preparamos la consulta para obtener las camisetas
     const query = 'SELECT * FROM camiseta';
 
-    // 2. Ejecutamos la consulta
     db.query(query, (error, resultados) => {
         if (error) {
             console.log(error);
             return res.render('error', { mensaje: 'Error al cargar camisetas' });
         }
 
-        // 3. Imprimimos en consola para verificar que hay datos (mira tu terminal tras guardar)
         console.log("Camisetas encontradas:", resultados);
 
-        // 4. Renderizamos la vista enviando la variable 'camisetas'
-        // IMPORTANTE: El nombre 'camisetas' aquí debe coincidir con el del 'each' en Pug
         res.render('pedido/crear', {
             camisetas: resultados
         });
@@ -96,10 +91,8 @@ exports.pedidoUpdateForm = (req, res) => {
 }
 
 exports.pedidoUpdate = (req, res) => {
-    // El id viene en la ruta
     const { id } = req.params;
 
-    // Datos que vienen del formulario
     const { fecha, estado, cliente, total } = req.body;
 
     let sql = "UPDATE `pedido` SET \
@@ -141,7 +134,7 @@ exports.tramitarPedidoForm = (req, res) => {
         const total = carrito.reduce((acc, item) => acc + parseFloat(item.subtotal), 0);
 
         res.render("pedido/tramitar", {
-            usuario,   // ahora siempre definido
+            usuario,
             carrito,
             total
         });
@@ -153,7 +146,6 @@ exports.tramitarPedido = (req, res) => {
     const usuarioId = req.session.user?.id;
     const { metodoPago } = req.body;
 
-    // 1. Obtener carrito del usuario
     const sqlCarrito = "SELECT * FROM carrito WHERE usuario = ?";
 
     db.query(sqlCarrito, [usuarioId], (err, carrito) => {
@@ -164,7 +156,6 @@ exports.tramitarPedido = (req, res) => {
 
         const total = carrito.reduce((t, item) => t + parseFloat(item.subtotal), 0);
 
-        // 2. Crear pedido
         const sqlPedido = `
             INSERT INTO pedido (cliente, total, estado)
             VALUES (?, ?, 'pagado')
@@ -178,7 +169,6 @@ exports.tramitarPedido = (req, res) => {
 
             const pedidoId = resultado.insertId;
 
-            // 3. Crear líneas de pedido
             const sqlLinea = `
                 INSERT INTO linea_pedido (ID_Pedido, ID_Camiseta, Precio_Venta)
                 VALUES (?, ?, ?)
@@ -193,14 +183,12 @@ exports.tramitarPedido = (req, res) => {
                 );
             });
 
-            // 4. Vaciar carrito
             const sqlVaciar = "DELETE FROM carrito WHERE usuario = ?";
 
             db.query(sqlVaciar, [usuarioId], (err) => {
                 if (err) console.log("Error vaciando carrito:", err);
             });
 
-            // 5. Redirigir a detalle del pedido
             res.redirect(`/pedido/confirmado/${pedidoId}`);
         });
     });
@@ -225,5 +213,38 @@ exports.pedidoConfirmado = (req, res) => {
         res.render("pedido/confirmado", {
             pedido: resultado[0]
         });
+    });
+};
+
+exports.listarPedidosAdmin = (req, res) => {
+    const sql = `
+        SELECT p.id, p.fecha, p.estado, p.total, u.username
+        FROM pedido p
+        JOIN usuario u ON u.id = p.cliente
+        ORDER BY p.fecha DESC
+    `;
+
+    db.query(sql, (err, pedidos) => {
+        if (err) {
+            console.log(err);
+            return res.render("error", { mensaje: "No se pudieron cargar los pedidos" });
+        }
+
+        res.render("pedido/admin_list", { pedidos });
+    });
+};
+
+exports.cambiarEstadoPedido = (req, res) => {
+    const { id } = req.params;
+    const { estado } = req.body;
+
+    const sql = "UPDATE pedido SET estado = ? WHERE id = ?";
+    db.query(sql, [estado, id], (err) => {
+        if (err) {
+            console.log(err);
+            return res.render("error", { mensaje: "No se pudo actualizar el estado del pedido" });
+        }
+
+        res.redirect("/admin/pedido");
     });
 };

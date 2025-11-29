@@ -18,6 +18,4 @@ router.get('/:id',pedidoController.pedido)
 router.get('/confirmado/:id', pedidoController.pedidoConfirmado)
 router.post("/confirmar", pedidoController.tramitarPedido);
 
-
-
 module.exports = router

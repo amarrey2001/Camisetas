@@ -12,6 +12,7 @@ const authRouter = require('./routes/authRouter')
 const carroRouter = require('./routes/carroRouter')
 const productoRouter = require('./routes/productoRouter')
 const pedidoRouter = require('./routes/pedidoRouter')
+const adminPedidoRouter = require('./routes/adminPedidoRouter')
 const publicoController = require('./controllers/camisetaController')
 
 // crea el objeto servidor Web
@@ -70,7 +71,8 @@ app.use('/admin/camiseta', camisetaRouter)
 app.use('/auth', authRouter)
 app.use('/carro', carroRouter)
 app.use('/camiseta', productoRouter)
-app.use('/pedido', pedidoRouter)
+app.use('/pedido', pedidoRouter);
+app.use('/admin/pedido', adminPedidoRouter);
 
 // Ruta home
 app.get('/', publicoController.catalogo)
