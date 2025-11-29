@@ -1,0 +1,37 @@
+extends ../layouts/main
+
+block contenido
+    h2 Pedidos - Administrador
+
+    each pedido in pedidos
+        .card.mb-3
+            .card-header.d-flex.justify-content-between.align-items-center
+                div
+                    strong Pedido #{pedido.id} - Cliente: #{pedido.username}
+                form(method="POST", action=`/admin/pedido/${pedido.id}/estado`)
+                    div.d-flex
+                        select.form-select(name="estado")
+                            option(value="carrito", selected=pedido.estado==='carrito') Carrito
+                            option(value="pagado", selected=pedido.estado==='pagado') Pagado
+                            option(value="procesando", selected=pedido.estado==='procesando') Procesando
+                            option(value="procesado", selected=pedido.estado==='procesado') Procesado
+                            option(value="enviado", selected=pedido.estado==='enviado') Enviado
+                            option(value="recibido", selected=pedido.estado==='recibido') Recibido
+                        button.btn.btn-primary.btn-sm.ms-2(type="submit") Cambiar
+            .card-body
+                p Fecha: #{pedido.fecha.toISOString().slice(0,10)} | Total: #{pedido.total} €
+                if pedido.lineas && pedido.lineas.length > 0
+                    table.table.table-sm.table-striped
+                        thead
+                            tr
+                                th Camiseta
+                                th Cantidad
+                                th Precio
+                                th Subtotal
+                        tbody
+                            each linea in pedido.lineas
+                                tr
+                                    td #{linea.marca} - #{linea.talla} (#{linea.color})
+                                    td #{linea.cantidad}
+                                    td #{linea.precio_unitario} €
+                                    td #{linea.subtotal} €
