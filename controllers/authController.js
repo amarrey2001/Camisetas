@@ -49,7 +49,7 @@ exports.register = (req, res) => {
     let hashedPass = bcrypt.hashSync(password, 10)
 
     const sql = 'INSERT INTO `usuario` (`username`, `password`, `email`, `telefono`, `direccion`, `activo`, `tipo`) \
-        VALUES (?, ?, ?, ?, ?, 0, "CLIENTE")';
+        VALUES (?, ?, ?, ?, ?, 1, "CLIENTE")';
     
     db.query(sql, [username, hashedPass, email, telefono, direccion], 
         (error, respuesta) => {
