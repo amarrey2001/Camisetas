@@ -66,7 +66,7 @@ INSERT INTO `usuario` (`id`, `username`, `password`, `email`, `telefono`, `direc
 
 INSERT INTO `camiseta` (`id`, `talla`, `sexo`, `color`, `marca`, `stock`, `precio`, `activo`) VALUES
                                                                                                   (1, 'xs', 'chico', '#e01b24', 'Adidas', 3, 20.00, 1),
-                                                                                                  (2, 'xs', 'chico', '#a0aba4', 'Puma', 10, 15.00, 0),
+                                                                                                  (2, 'xs', 'chico', '#a0aba4', 'Puma', 10, 15.00, 1),
                                                                                                   (3, 's', 'unisex', '#000000', 'Puma', 3, 1.20, 1),
                                                                                                   (4, 'xxs', 'niña', '#ed333b', 'Puma', 12, 12.00, 1),
                                                                                                   (5, 'xxl', 'niño', '#f9f06b', 'Adidas', 12, 34.00, 1),

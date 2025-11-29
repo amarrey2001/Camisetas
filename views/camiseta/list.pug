@@ -18,7 +18,7 @@ block contenido
                 th Precio
                 th Activo
                 th Editar
-                th Borrar
+                th Desactivar
         tbody
             each camiseta in camisetas
                 tr
@@ -39,7 +39,7 @@ block contenido
                     td
                         a.btn.btn-success.btn-sm(href=`/admin/camiseta/edit/${camiseta.id}`) Editar
                     td
-                        a.btn.btn-danger.btn-sm(href=`/admin/camiseta/del/${camiseta.id}`) Borrar
+                        a.btn.btn-danger.btn-sm(href=`/admin/camiseta/del/${camiseta.id}`) Desactivar
 
     p.text-center.mt-4
         a.btn.btn-primary(href="/admin/camiseta/add") Añadir una nueva
