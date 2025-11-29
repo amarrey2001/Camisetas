@@ -3,18 +3,20 @@ extends ../layouts/main
 block contenido
     style.
         .pedidos-container {
-            margin-top: 20px;
+            margin: 30px auto;
+            max-width: 1000px;
         }
 
         .pedidos-container h2 {
-            color: #f5f5f5;
+            color: #ffd700;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         .pedidos-container p {
             color: #ccc;
             text-align: center;
+            font-size: 1.1em;
         }
 
         table.table {
@@ -25,6 +27,7 @@ block contenido
             border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            margin-bottom: 20px;
         }
 
         table.table thead {
@@ -33,10 +36,10 @@ block contenido
 
         table.table th,
         table.table td {
-            padding: 10px 12px;
+            padding: 12px 15px;
             border-bottom: 1px solid #333;
             text-align: center;
-            font-size: 0.9em;
+            font-size: 0.95em;
         }
 
         table.table th {
@@ -49,10 +52,12 @@ block contenido
 
         .btn {
             border-radius: 5px;
-            padding: 5px 10px;
+            padding: 6px 12px;
             font-weight: bold;
             transition: all 0.2s;
             cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
         }
 
         .btn-primary {
@@ -88,7 +93,7 @@ block contenido
         a.add-pedido {
             display: inline-block;
             margin-top: 20px;
-            padding: 8px 15px;
+            padding: 10px 18px;
             background-color: #333;
             color: #f5f5f5;
             border-radius: 5px;
@@ -116,10 +121,12 @@ block contenido
                 tbody
                     each pedido in pedidos
                         tr
-                            td= pedido.fecha
+                            td= pedido.fecha.toISOString().slice(0,10)
                             td= pedido.estado
-                            td #{pedido.total}€
+                            td #{pedido.total} €
                             td #{pedido.marca} - #{pedido.talla}
-                            td #{pedido.Precio_Venta}€
+                            td #{pedido.Precio_Venta} €
         else
             p No has realizado ningún pedido todavía.
+
+        a.add-pedido(href="/") Volver al catálogo
