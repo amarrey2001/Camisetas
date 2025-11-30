@@ -142,14 +142,40 @@ RUTA | MÉTODO | DESCRIPCIÓN | AUTENTICACIÓN
 `/admin/pedido/` | GET | Listar todos los pedidos (admin) | requiere `OPERADOR`
 `/admin/pedido/:id/estado` | POST | Cambiar estado de pedido | requiere `OPERADOR`
 
-Notas sobre seguridad y montaje
------------------------------
-- El middleware en `app.js` realiza la protección básica: redirige a `/auth/login` si se intenta acceder a `/admin` sin ser `OPERADOR`.
-- Las rutas montadas en `app.js`:
-   - `app.use('/admin/camiseta', camisetaRouter)`
-   - `app.use('/auth', authRouter)`
-   - `app.use('/carro', carroRouter)`
-   - `app.use('/camiseta', productoRouter)` (catálogo público)
-   - `app.use('/pedido', pedidoRouter)`
-   - `app.use('/admin/pedido', adminPedidoRouter)`
 
+Controladores
+----------------------------------------------------------------------------------
+Abajo hay una lista de los métodos principales de los controladores con una descripción breve. Sirve para entender qué hace cada método cuando quieras tocar el código.
+
+- `controllers/authController.js`
+   - `loginForm(req, res)`: muestra la vista del formulario de login (`auth/login`).
+   - `login(req, res)`: busca el usuario por `username`, compara la contraseña con `bcrypt`. Si es correcto y el usuario está activo guarda `req.session.user` y redirige a `/`.
+   - `logout(req, res)`: destruye la sesión y redirige a `/`.
+   - `registerForm(req, res)`: muestra el formulario de registro (`auth/register`).
+   - `register(req, res)`: recibe datos del formulario, hashea la contraseña con `bcrypt.hashSync` e inserta el usuario en la tabla `usuario`.
+
+- `controllers/camisetaController.js`
+   - `catalogo(req, res)`: consulta camisetas activas con stock y renderiza la página principal (`index`). Usada para la vista pública.
+   - `camisetas(req, res)`: lista todas las camisetas (panel admin) y renderiza `camiseta/list`.
+   - `camiseta(req, res)`: muestra una camiseta por `id`. Valida el parámetro y muestra la vista correspondiente.
+   - `camisetaAddForm(req, res)` / `camisetaAdd(req, res)`: muestra formulario de alta y procesa la inserción en la BBDD (convierte `activo` a 1/0).
+   - `camisetaUpdateForm(req, res)` / `camisetaUpdate(req, res)`: muestra formulario con datos actuales y actualiza la fila (consulta por `id`).
+   - `camisetaDeleteForm(req, res)` / `camisetaDelete(req, res)`: muestra confirmación y desactiva la camiseta (`activo = 0`) en vez de borrarla físicamente.
+
+- `controllers/productoController.js`
+   - `list(req, res)`: listado público de camisetas activas (montado en la ruta `/camiseta`). Similar a `catalogo` pero separado por organización del código.
+
+- `controllers/carroController.js`
+   - `mostrarCarrito(req, res)`: comprueba sesión, obtiene líneas del carrito (JOIN con `camiseta`), convierte precios a número y calcula total. Renderiza `carro/list`.
+   - `addCamiseta(req, res)`: agrega una línea al carrito. Lee el precio de la camiseta, calcula subtotal e inserta en la tabla `carrito`.
+   - `deleteCamiseta(req, res)`: elimina la línea del carrito por `id`.
+
+- `controllers/pedidoController.js`
+   - `pedidos(req, res)`: lista los pedidos del usuario logueado (JOIN con `linea_pedido` y `camiseta`) y muestra `pedido/list`.
+   - `pedidoCreateForm(req, res)` / `pedidoCreate(req, res)`: muestra formulario para crear pedido y lo inserta. (Atención: revisar columnas en la tabla `pedido` antes de usar `pedidoCreate` porque el controlador usa nombres concretos que pueden no coincidir con tu DDL de ejemplo.)
+   - `pedido(req, res)`: muestra detalle de un pedido por `id`.
+   - `pedidoUpdateForm(req, res)` / `pedidoUpdate(req, res)`: formulario y actualización del pedido.
+   - `tramitarPedidoForm(req, res)` / `tramitarPedido(req, res)`: transforma el carrito en un pedido: calcula total, crea registro en `pedido`, inserta las `linea_pedido` y vacía el carrito. Es la lógica principal de compra.
+   - `pedidoConfirmado(req, res)`: muestra la página de pedido confirmado (`pedido/confirmado`).
+   - `listarPedidosAdmin(req, res)`: listado administrativo de todos los pedidos.
+   - `cambiarEstadoPedido(req, res)`: actualiza el estado de un pedido (usado por admin).
